@@ -37,8 +37,9 @@
             </TabItem>
         </TabControl>
         <Grid HorizontalAlignment="Stretch" Margin="5,1,5,4" Grid.Row="1" VerticalAlignment="Stretch">
+            <Button x:Name="button" Content="Button" Click="button_Click" Margin="0,0,423,0"/>
             <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Button x:Name="button" Content="Button" Click="button_Click"/>
+                
             </Border>
         </Grid>
 

@@ -37,35 +37,97 @@ namespace SteamExtender
         public Func<double, string> XFormatter { get; set; }
         public Func<double, string> YFormatter { get; set; }
 
-        private double resolutionInSeconds;
-        private const double Div = 10; // коэффициент отдаления
-        private const double VisibleRange = 10; // количество видимых шагов
-        private const double StepInPixels = 40; // размер шага(Res.InSeconds) в пикселах
-        private double ResolutionInSeconds // размер одного шага
+        private const double Div = 1.1; // коэффициент отдаления
+
+        private const double NumberOfSteps = 10; //количество шагов
+
+        private double fullRes = 30;
+        private double FullResolution // количество секунд от начала до конца графика
         {
-            get { return resolutionInSeconds; }
+            get
+            {
+                return fullRes;
+            }
             set
             {
-                if (value < 1)
+                if (value < NumberOfSteps)
                 {
-                    resolutionInSeconds = 1;
+                    fullRes = NumberOfSteps;
+                    
                     return;
                 }
-                resolutionInSeconds = value;
+                //fullRes = value;
+                //MaximumPoint = -1;
+                double diffset = value - fullRes;
+                fullRes = value;
+                MinimumPoint = MinimumPoint - diffset / 2;
+                MaximumPoint = MaximumPoint + diffset / 2;
+
             }
         }
-        private double ResolutionInTicks //размер шага в тиках
+        private double StepWidthInPixels // ширина шага в пикселях
         {
             get
             {
-                return ResolutionInSeconds * TimeSpan.FromSeconds(1).Ticks;
+                return Width / NumberOfSteps;
             }
         }
-        private double StepsAvailable
+        private double StepWidthInSeconds
         {
             get
             {
-                return chart.ActualWidth / StepInPixels;
+                return FullResolution / NumberOfSteps;
+            }
+        }
+        private double StepWidthInGraphs // ширина шага в graphs
+        {
+            get
+            {
+                return StepWidthInSeconds;
+            }
+        }
+
+        private double MinimumPoint
+        {
+            get
+            {
+                if (!chart.AxisX[0].MinValue.HasValue)
+                {
+                    chart.AxisX[0].MinValue = DoubleConverter.
+                        FromDateToGraph(((chart.Series[0] as StepLineSeries).Values[0] as DateModel).DateTime);
+                }
+                return (double)chart.AxisX[0].MinValue;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    chart.AxisX[0].MinValue = DoubleConverter.
+                        FromDateToGraph(((chart.Series[0] as StepLineSeries).Values[0] as DateModel).DateTime);
+                    return;
+                }
+                chart.AxisX[0].MinValue = value;
+            }
+        }
+
+        private double MaximumPoint
+        {
+            get
+            {
+                if (!chart.AxisX[0].MaxValue.HasValue)
+                {
+                    chart.AxisX[0].MaxValue = chart.AxisX[0].MaxValue = MinimumPoint + FullResolution;
+                }
+                return (double)chart.AxisX[0].MaxValue;
+            }
+            set
+            {
+                if (value < 0 || value < MinimumPoint)
+                {
+                    chart.AxisX[0].MaxValue = MinimumPoint + FullResolution;
+                    return;
+                }
+                chart.AxisX[0].MaxValue = value;
             }
         }
 
@@ -74,56 +136,7 @@ namespace SteamExtender
         private ChartValues<MainWindow.DateModel> observableValues;
 
         private Point currMousePosition { get; set; }
-        private double SizeOfDiff {
-            get
-            {
-                return StepInPixels / ResolutionInSeconds;
-            }
-        }
-        private double MinimumPoint
-        {
-            get
-            {
-                if (chart.Series == null)
-                    return 0;
-                if (((StepLineSeries)(chart.Series[0])).Values.Count == 0)
-                {
-                    return 0;
-                }
-                return (double)(chart.AxisX[0].MinValue = DateToDoubleTicks(((DateModel)((StepLineSeries)(chart.Series[0])).Values[0]).DateTime));
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    chart.AxisX[0].MinValue = 0;
-                    return;
-                }
-                chart.AxisX[0].MinValue = value;
-            }
-        }
-        private double MaximumPoint
-        {
-            get
-            {
-                if (chart.Series == null)
-                    return MinimumPoint + ResolutionInTicks;
-                if (((StepLineSeries)(chart.Series[0])).Values.Count == 0)
-                {
-                    return MinimumPoint + ResolutionInTicks;
-                }
-                return (double)(chart.AxisX[0].MaxValue = MinimumPoint + StepsAvailable);
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    chart.AxisX[0].MaxValue = MinimumPoint + ResolutionInTicks;
-                    return;
-                }
-                chart.AxisX[0].MaxValue = value;
-            }
-        }
+        
 
         public MainWindow()
         {
@@ -133,23 +146,22 @@ namespace SteamExtender
             InitArray();
             DataContext = this;
             currMousePosition = new Point(-1, -1);
-            ResolutionInSeconds = 1;
             
         }
 
         private void InitMatrix()
         {
-            double temp = MinimumPoint;
+            MinimumPoint = -1;
             MaximumPoint = -1;
         }
 
         private void Init()
         {
             dayConfig = Mappers.Xy<DateModel>()
-               .X(dayModel => DateToDoubleTicks(dayModel.DateTime))
+               .X(dayModel => DoubleConverter.FromDateToGraph(dayModel.DateTime)) //преобразователь из DateTime в Graph
                .Y(dayModel => dayModel.Value);
             //and the formatter
-            XFormatter = (value => TicksToStringFormatter(value));
+            XFormatter = (value => DoubleConverter.FromGraphToString(value)); //преобразователь из Graph в строку
         }
 
         private void InitArray()
@@ -183,37 +195,19 @@ namespace SteamExtender
                 if (currMousePosition.X == -1 || currMousePosition.Y == -1)
                 {
                     currMousePosition = new Point(e.GetPosition(null).X, e.GetPosition(null).Y);
+                    
                     return;
                 }
                 offset = e.GetPosition(null).X - currMousePosition.X;
-                double min, max;
-                if (!chart.AxisX[0].MinValue.HasValue)
-                {
-                    MinimumPoint = DateToDoubleTicks(((DateModel)((StepLineSeries)(chart.Series[0])).Values[0]).DateTime);
-                }
-                if (!chart.AxisX[0].MaxValue.HasValue)
-                {
-                    MaximumPoint = MinimumPoint + StepsAvailable * ResolutionInTicks;
-                }
-                min = MinimumPoint;
-                max = MaximumPoint;
-                button.Content = "offset: " + offset + " size: " + SizeOfDiff;
-                // offset > 0 => move left
-                    chart.AxisX[0].MinValue = min - (offset * SizeOfDiff) * ResolutionInTicks;
-                    chart.AxisX[0].MaxValue = max - (offset * SizeOfDiff) * ResolutionInTicks;
+                offset = e.GetPosition(null).X - currMousePosition.X;
+                //если > 0, мин валуе уменьшается
+                offset = (offset / StepWidthInPixels) * StepWidthInSeconds;
+                MinimumPoint = MinimumPoint - offset;
+                MaximumPoint = MaximumPoint - offset;
                 currMousePosition = new Point(e.GetPosition(null).X, e.GetPosition(null).Y);
             }
         }
 
-        private double DateToDoubleTicks(DateTime dt)
-        {
-            return (double)dt.Ticks / TimeSpan.FromSeconds(1).Ticks;
-        }
-
-        private string TicksToStringFormatter(double value)
-        {
-            return new DateTime((long)(value * TimeSpan.FromSeconds(1).Ticks)).ToString("HH:mm:ss");
-        }
 
         private void chart_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -224,26 +218,52 @@ namespace SteamExtender
         {
             if (e.Delta > 0)
             {
-                double min = MinimumPoint;
-                double max = MaximumPoint;
-                double diff = max - min;
-                double center = (max - min) / 2;
-                diff /= Div;
-                min = center - diff / 2;
-                max = center + diff / 2;
+                FullResolution = FullResolution / Div;
             }
-
-            // If the mouse wheel delta is negative, move the box down.
-            if (e.Delta < 0)
+            else
             {
-                double min = MinimumPoint;
-                double max = MaximumPoint;
-                double diff = max - min;
-                double center = (max - min) / 2;
-                diff *= Div;
-                min = center - diff / 2;
-                max = center + diff / 2;
+                FullResolution = FullResolution * Div;
             }
+        }
+    }
+
+    internal static class DoubleConverter
+    {
+        private static long k = TimeSpan.FromSeconds(1).Ticks;
+
+        static public long FromDateToTicks(DateTime date)
+        {
+            return date.Ticks;
+        }
+
+        static public double FromDateToGraph(DateTime date)
+        {
+            return date.Ticks / k;
+        }
+
+        static public double FromTicksToGraph(long ticks)
+        {
+            return ticks / k;
+        }
+
+        static public long FromGraphToTicks(double graph)
+        {
+            return (long)(graph * k);
+        }
+
+        static public DateTime FromGraphToDate(double graph)
+        {
+            return new DateTime((long)(graph * k));
+        }
+
+        static public string FromGraphToString(double graph)
+        {
+            return new DateTime((long)(graph * k)).ToString("HH:mm:ss");
+        }
+
+        static public DateTime FromTicksToDate(long ticks)
+        {
+            return new DateTime(ticks);
         }
     }
 }
