@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamExtender", "SteamExtender\SteamExtender.csproj", "{023D76D4-C9ED-4924-A9F9-38891C017CDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamThemes", "SteamThemes\SteamThemes.csproj", "{AC7C5E5B-31F5-4A2A-B2E7-FD5F9E79BEEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{E7BDEA87-9BB4-4C5C-A16D-408DC6677DB0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{023D76D4-C9ED-4924-A9F9-38891C017CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{023D76D4-C9ED-4924-A9F9-38891C017CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{023D76D4-C9ED-4924-A9F9-38891C017CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{023D76D4-C9ED-4924-A9F9-38891C017CDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC7C5E5B-31F5-4A2A-B2E7-FD5F9E79BEEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC7C5E5B-31F5-4A2A-B2E7-FD5F9E79BEEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC7C5E5B-31F5-4A2A-B2E7-FD5F9E79BEEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC7C5E5B-31F5-4A2A-B2E7-FD5F9E79BEEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7BDEA87-9BB4-4C5C-A16D-408DC6677DB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7BDEA87-9BB4-4C5C-A16D-408DC6677DB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7BDEA87-9BB4-4C5C-A16D-408DC6677DB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7BDEA87-9BB4-4C5C-A16D-408DC6677DB0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

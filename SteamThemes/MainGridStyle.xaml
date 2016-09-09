@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SteamThemes">
+
+    <SolidColorBrush x:Key="BrushColor" Color="#4d4d4d"/>
+    <SolidColorBrush x:Key="ForegroundColor" Color="#262626"/>
+    <SolidColorBrush x:Key="ActiveColor" Color="#253754"/>
+    <SolidColorBrush x:Key="ActiveFont" Color="#AAAAAA"/>
+    <SolidColorBrush x:Key="InactiveFont" Color="#737373"/>
+    <Thickness x:Key="BorderThickness" Top="3" Bottom="3" Left="3" Right="3"/>
+
+    <Style TargetType="TabItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Grid Name="Panel">
+                        <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Panel" Property="Background" Value="{StaticResource ActiveColor}" />
+                            <Setter Property="Foreground" Value="{StaticResource ActiveFont}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Panel" Property="Background" Value="{StaticResource ForegroundColor}" />
+                            <Setter Property="Foreground" Value="{StaticResource InactiveFont}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="TabControl">
+        <Setter Property="Background" Value="{StaticResource ForegroundColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushColor}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
+    </Style>
+    
+    <Style TargetType="Grid" x:Key="GridTheme">
+        <Setter Property="Background" Value="{StaticResource ForegroundColor}" />
+    </Style>
+    
+    <Style TargetType="Border">
+        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushColor}" />
+    </Style>
+    
+</ResourceDictionary>
