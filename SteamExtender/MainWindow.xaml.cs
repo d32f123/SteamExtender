@@ -109,12 +109,12 @@ namespace SteamExtender
                     double min = Double.MaxValue;
                     for (int i = 0; i < 5; ++i)
                     {
-                        if ((chart.Series[i] as LineSeries).Values.Count == 0)
+                        if ((chart.Series[i] as ColumnSeries).Values.Count == 0)
                             continue;
                         if (DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as LineSeries).Values[0] as DateModel).DateTime) < min)
+                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime) < min)
                             min = DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as LineSeries).Values[0] as DateModel).DateTime);
+                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime);
                     }
                     if (min == Double.MaxValue)
                         chart.AxisX[0].MinValue = 0.0;
@@ -130,12 +130,12 @@ namespace SteamExtender
                     double min = Double.MaxValue;
                     for (int i = 0; i < 5; ++i)
                     {
-                        if ((chart.Series[i] as LineSeries).Values.Count == 0)
+                        if ((chart.Series[i] as ColumnSeries).Values.Count == 0)
                             continue;
                         if (DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as LineSeries).Values[0] as DateModel).DateTime) < min)
+                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime) < min)
                             min = DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as LineSeries).Values[0] as DateModel).DateTime);
+                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime);
                     }
                     if (min == Double.MaxValue)
                         chart.AxisX[0].MinValue = 0.0;
@@ -188,29 +188,30 @@ namespace SteamExtender
                     switch (previousAddition)
                     {
                         case SteamStatus.InGame:
-                            InGameValues.Add(new DateModel { DateTime = Date, Value = 4 });
-                            InGameValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
+                            //InGameValues.Add(new DateModel { DateTime = Date, Value = 4 });
+                            //InGameValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
                             break;
                         case SteamStatus.Online:
-                            OnlineValues.Add(new DateModel { DateTime = Date, Value = 3 });
-                            OnlineValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
+                            //OnlineValues.Add(new DateModel { DateTime = Date, Value = 3 });
+                            //OnlineValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
                             break;
                         case SteamStatus.Away:
-                            AwayValues.Add(new DateModel { DateTime = Date, Value = 2 });
-                            AwayValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
+                            //AwayValues.Add(new DateModel { DateTime = Date, Value = 2 });
+                            //AwayValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
                             break;
                         case SteamStatus.Snooze:
-                            SnoozeValues.Add(new DateModel { DateTime = Date, Value = 1 });
-                            SnoozeValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
+                            //SnoozeValues.Add(new DateModel { DateTime = Date, Value = 1 });
+                            //SnoozeValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
                             break;
                         case SteamStatus.Offline:
-                            OfflineValues.Add(new DateModel { DateTime = Date, Value = 0 });
-                            OfflineValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
+                            //OfflineValues.Add(new DateModel { DateTime = Date, Value = 0 });
+                            //OfflineValues.Add(new DateModel { DateTime = Date, Value = Double.NaN });
                             break;
                     }
                     previousAddition = Status;
                 }
-                switch(Status)
+                InGameValues.Add(new DateModel { DateTime = Date, Value = (int)Status });
+                /*switch (Status)
                 {
                     case SteamStatus.InGame:
                         InGameValues.Add(new DateModel { DateTime = Date , Value = 4});
@@ -227,7 +228,7 @@ namespace SteamExtender
                     case SteamStatus.Offline:
                         OfflineValues.Add(new DateModel { DateTime = Date, Value = 0 });
                         break;
-                }
+                }*/
             }
         }
 
@@ -250,8 +251,6 @@ namespace SteamExtender
             SnoozeValues = new ChartValues<DateModel>(),
             OfflineValues = new ChartValues<DateModel>()
         };
-
-
 
         private Point currMousePosition { get; set; }
         
@@ -293,52 +292,52 @@ namespace SteamExtender
         {
             Random rand = new Random();
             Series2 = new SeriesCollection(dayConfig) {
-                 new LineSeries //In-game
+                 new ColumnSeries //In-game
                  {
                     Values = observableValues2.InGameValues,
                     Fill = new SolidColorBrush(Color.FromRgb(60, 83, 48)),
                     Stroke = new SolidColorBrush(Color.FromRgb(107, 186, 69)),
-                    PointGeometrySize = 15,
-                    PointForeround = new SolidColorBrush(Color.FromRgb(68, 95, 50)),
+                    //PointGeometrySize = 15,
+                    //PointForeround = new SolidColorBrush(Color.FromRgb(68, 95, 50)),
                     //AlternativeStroke = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)),
                     StrokeThickness = 3
                  },
-                 new LineSeries //Online
+                 /*new ColumnSeries //Online
                  {
                      Values = observableValues2.OnlineValues,
                      Stroke = new SolidColorBrush(Color.FromRgb(83, 164, 196)),
                      Fill = new SolidColorBrush(Color.FromRgb(49, 85, 99)),
-                     PointGeometrySize = 15,
-                     PointForeround = new SolidColorBrush(Color.FromRgb(57, 95, 109)),
+                     //PointGeometrySize = 15,
+                     //PointForeround = new SolidColorBrush(Color.FromRgb(57, 95, 109)),
                      StrokeThickness = 3
                  },
-                 new LineSeries //Away
+                 new ColumnSeries //Away
                  {
                      Values = observableValues2.AwayValues,
                      Stroke = new SolidColorBrush(Color.FromRgb(61, 118, 141)),
                      Fill = new SolidColorBrush(Color.FromRgb(44, 83, 98)),
-                     PointGeometrySize = 15,
-                     PointForeround = new SolidColorBrush(Color.FromRgb(57, 95, 109)),
+                     //PointGeometrySize = 15,
+                     //PointForeround = new SolidColorBrush(Color.FromRgb(57, 95, 109)),
                      StrokeThickness = 3
                  },
-                 new LineSeries //Snooze
+                 new ColumnSeries //Snooze
                  {
                      Values = observableValues2.SnoozeValues,
                      Stroke = new SolidColorBrush(Color.FromRgb(61, 118, 141)),
                      Fill = new SolidColorBrush(Color.FromRgb(44, 83, 98)),
-                     PointGeometrySize = 15,
-                     PointForeround = new SolidColorBrush(Color.FromRgb(57, 95, 109)),
+                     //PointGeometrySize = 15,
+                     //PointForeround = new SolidColorBrush(Color.FromRgb(57, 95, 109)),
                      StrokeThickness = 3
                  },
-                 new LineSeries //Offline
+                 new ColumnSeries //Offline
                  {
                      Values = observableValues2.OfflineValues,
                      Stroke = new SolidColorBrush(Color.FromRgb(106, 106, 106)),
                      Fill = new SolidColorBrush(Color.FromRgb(55, 55, 55)),
-                     PointGeometrySize = 15,
-                     PointForeround = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                     //PointGeometrySize = 15,
+                     //PointForeround = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                      StrokeThickness = 3
-                 }
+                 }*/
              };
             observableValues2.AddValue(DateTime.Now, (SteamStatus)rand.Next(0, 4));
             observableValues2.AddValue(DateTime.Now, (SteamStatus)rand.Next(0, 4));
@@ -449,7 +448,7 @@ namespace SteamExtender
 
     internal static class DoubleConverter
     {
-        private static long k = TimeSpan.FromSeconds(1).Ticks;
+        private static long k = TimeSpan.FromMinutes(1).Ticks;
 
         static public long FromDateToTicks(DateTime date)
         {
