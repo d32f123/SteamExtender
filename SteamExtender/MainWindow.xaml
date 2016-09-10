@@ -18,17 +18,28 @@
             </TabItem>
             <TabItem Header="TabItem" IsSelected="True">
                 <Grid>
-                    <lvc:CartesianChart Name="chart" Zoom="None" ScrollMode="None" Series="{Binding Series}" MouseWheel="chart_MouseWheel" MouseDown="chart_MouseDown" MouseMove="chart_MouseMove">
+                    <lvc:CartesianChart Name="chart" Zoom="None" ScrollMode="None" Series="{Binding Series2}" DataClick="chart_DataClick" MouseWheel="chart_MouseWheel" MouseDown="chart_MouseDown" MouseMove="chart_MouseMove">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis DisableAnimations="False" LabelFormatter="{Binding XFormatter}" >
+                            <lvc:Axis DisableAnimations="False" LabelFormatter="{Binding XFormatter}">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator StrokeThickness="1.5" StrokeDashArray="4">
+                                        <lvc:Separator.Stroke>
+                                            <SolidColorBrush Color="#404F56" />
+                                        </lvc:Separator.Stroke>
+                                    </lvc:Separator>
+                                </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis DisableAnimations="True">
+                            <lvc:Axis DisableAnimations="True" Title="Status" Labels="{Binding Labels}">
                                 <lvc:Axis.MinValue>0</lvc:Axis.MinValue>
-                                <lvc:Axis.MaxValue>8</lvc:Axis.MaxValue>
+                                <lvc:Axis.MaxValue>4</lvc:Axis.MaxValue>
                                 <lvc:Axis.Separator>
-                                    <lvc:Separator IsEnabled="True" Step="1"></lvc:Separator>
+                                    <lvc:Separator IsEnabled="True" Step="1" StrokeThickness="1.5" StrokeDashArray="4">
+                                        <lvc:Separator.Stroke>
+                                            <SolidColorBrush Color="#404F56" />
+                                     </lvc:Separator.Stroke>
+                                    </lvc:Separator>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisY>
@@ -38,9 +49,10 @@
         </TabControl>
         <Grid HorizontalAlignment="Stretch" Margin="5,1,5,4" Grid.Row="1" VerticalAlignment="Stretch">
             <Button x:Name="button" Content="Button" Click="button_Click" Margin="0,0,423,0"/>
+            <Button x:Name="button1" Content="Button" Margin="412,0,0,0" Click="button1_Click"/>
             <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                
             </Border>
+            <Label x:Name="label" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Width="593"/>
         </Grid>
 
     </Grid>
