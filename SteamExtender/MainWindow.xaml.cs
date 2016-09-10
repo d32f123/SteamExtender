@@ -106,20 +106,8 @@ namespace SteamExtender
             {
                 if (!chart.AxisX[0].MinValue.HasValue)
                 {
-                    double min = Double.MaxValue;
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        if ((chart.Series[i] as ColumnSeries).Values.Count == 0)
-                            continue;
-                        if (DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime) < min)
-                            min = DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime);
-                    }
-                    if (min == Double.MaxValue)
-                        chart.AxisX[0].MinValue = 0.0;
-                    else
-                        chart.AxisX[0].MinValue = min;
+                    chart.AxisX[0].MinValue = DoubleConverter.
+                        FromDateToGraph(((chart.Series[0] as ColumnSeries).Values[0] as DateModel).DateTime);
                 }
                 return (double)chart.AxisX[0].MinValue;
             }
@@ -127,20 +115,8 @@ namespace SteamExtender
             {
                 if (value < 0)
                 {
-                    double min = Double.MaxValue;
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        if ((chart.Series[i] as ColumnSeries).Values.Count == 0)
-                            continue;
-                        if (DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime) < min)
-                            min = DoubleConverter.
-                        FromDateToGraph(((chart.Series[i] as ColumnSeries).Values[0] as DateModel).DateTime);
-                    }
-                    if (min == Double.MaxValue)
-                        chart.AxisX[0].MinValue = 0.0;
-                    else
-                        chart.AxisX[0].MinValue = min;
+                    chart.AxisX[0].MinValue = DoubleConverter.
+                        FromDateToGraph(((chart.Series[0] as ColumnSeries).Values[0] as DateModel).DateTime);
                     return;
                 }
                 chart.AxisX[0].MinValue = value;
@@ -300,7 +276,8 @@ namespace SteamExtender
                     //PointGeometrySize = 15,
                     //PointForeround = new SolidColorBrush(Color.FromRgb(68, 95, 50)),
                     //AlternativeStroke = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)),
-                    StrokeThickness = 3
+                    StrokeThickness = 3,
+                    
                  },
                  /*new ColumnSeries //Online
                  {
@@ -448,7 +425,7 @@ namespace SteamExtender
 
     internal static class DoubleConverter
     {
-        private static long k = TimeSpan.FromMinutes(1).Ticks;
+        private static long k = TimeSpan.FromSeconds(5).Ticks;
 
         static public long FromDateToTicks(DateTime date)
         {
