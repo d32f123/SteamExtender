@@ -2,12 +2,41 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SteamExtender"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/SteamThemes;component/ThemeDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="OfflineBrush" Color="#6a6a6a"/>
+            <SolidColorBrush x:Key="OnlineBrush" Color="#46829a"/>
+            <SolidColorBrush x:Key="InGameBrush" Color="#719032"/>
+            <Style x:Key="OfflineBorder" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{StaticResource OfflineBrush}"/>
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+            </Style>
+            <Style x:Key="OnlineBorder" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{StaticResource OnlineBrush}"/>
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+            </Style>
+            <Style x:Key="InGameBorder" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{StaticResource InGameBrush}"/>
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+            </Style>
+            <Style x:Key="NoUserBorder" TargetType="Border">
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

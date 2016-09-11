@@ -6,11 +6,11 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:SteamExtender"
         mc:Ignorable="d"
-        Title="SteamHelper" Height="357.227" Width="610.693">
+        Title="SteamHelper" Height="357.227" Width="610.693" SizeChanged="Grid_SizeChanged">
     <Grid Margin="0,0,0,-1" Background="#262626">
         <Grid.RowDefinitions>
             <RowDefinition Height="272*"/>
-            <RowDefinition Height="55*"/>
+            <RowDefinition Height="54*"/>
         </Grid.RowDefinitions>
         <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5,5,5,-4" SelectedIndex="1">
             <TabItem Header="TabItem">
@@ -38,7 +38,7 @@
                                     <lvc:Separator IsEnabled="True" Step="1" StrokeThickness="1.5" StrokeDashArray="4">
                                         <lvc:Separator.Stroke>
                                             <SolidColorBrush Color="#404F56" />
-                                     </lvc:Separator.Stroke>
+                                        </lvc:Separator.Stroke>
                                     </lvc:Separator>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
@@ -48,12 +48,51 @@
             </TabItem>
         </TabControl>
         <Grid HorizontalAlignment="Stretch" Margin="5,1,5,4" Grid.Row="1" VerticalAlignment="Stretch">
-            <Button x:Name="button" Content="Button" Click="button_Click" Margin="0,0,423,0"/>
-            <Button x:Name="button1" Content="Button" Margin="412,0,0,0" Click="button1_Click"/>
-            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            </Border>
-            <Label x:Name="label" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Width="593"/>
+            <Button Visibility="Hidden" x:Name="button" Content="Button" Click="button_Click" Margin="0,0,423,0"/>
+            <Button Visibility="Hidden" x:Name="button1" Content="Button" Margin="412,0,0,0" Click="button1_Click"/>
+            <Grid Name="gridInside" Grid.Column="0" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Name="borderInside" Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="1" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="2" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="3" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="4" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="5" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="6" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="7" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="9" Width="{Binding ElementName=gridInside, Path=ActualHeight}" >
+                <Border Margin="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </Grid>
+            
+            <Border x:Name="border" Grid.ColumnSpan="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
         </Grid>
+        <Label x:Name="label" Foreground="White" Content="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="47,55,0,0" Width="142"/>
 
     </Grid>
 </Window>

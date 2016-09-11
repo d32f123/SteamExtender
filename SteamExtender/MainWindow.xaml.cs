@@ -19,6 +19,8 @@ using System.Threading;
 using LiveCharts.Configurations;
 using System.ComponentModel;
 using LiveCharts.Definitions.Series;
+using System.Globalization;
+using SteamExtender.SteamLogic;
 
 namespace SteamExtender
 {
@@ -29,15 +31,9 @@ namespace SteamExtender
     {
         public SeriesCollection Series2 { get; set; }
 
-        public enum SteamStatus //TODO: Перенести в отдельный класс
-        {
-            NaN = -1,
-            Offline,
-            Snooze,
-            Away,
-            Online,
-            InGame
-        }
+        public BindingExpression be;
+
+        public const int NumberOfFriendSlots = 11;
 
         public string[] Labels { get; set; }
 
@@ -251,16 +247,20 @@ namespace SteamExtender
             OfflineValues = new ChartValues<DateModel>()
         };
 
-
-
         private Point currMousePosition { get; set; }
         
 
         public MainWindow()
         {
             InitializeComponent();
+            InitChartLogic();
+            be = this.GetBindingExpression(MainWindow.MinWidthProperty);
+        }
+
+        private void InitChartLogic()
+        {
             MinimumPoint = 0;
-            Init();
+            InitChartFormatters();
             InitArray();
             DataContext = this;
             currMousePosition = new Point(-1, -1);
@@ -274,13 +274,13 @@ namespace SteamExtender
             };
         }
 
-        private void InitMatrix()
+        private void SetChartRegion() //задает начальный масштаб и двигает MinValue на нужное значение
         {
             MinimumPoint = -1;
             MaximumPoint = -1;
         }
 
-        private void Init()
+        private void InitChartFormatters()
         {
             dayConfig = Mappers.Xy<DateModel>()
                .X(dayModel => DoubleConverter.FromDateToGraph(dayModel.DateTime)) //преобразователь из DateTime в Graph
@@ -353,13 +353,17 @@ namespace SteamExtender
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            InitMatrix();
+            SetChartRegion();
         }
 
+        /// <summary>
+        /// Анимация графика
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chart_MouseMove(object sender, MouseEventArgs e)
         {
             double offset;
-            label.Content = "Pixels: " + StepWidthInPixels + " Seconds: " + StepWidthInSeconds;
             if (e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed)
             {
                 if (currMousePosition.X == -1 || currMousePosition.Y == -1)
@@ -381,7 +385,7 @@ namespace SteamExtender
 
         private void chart_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            currMousePosition = new Point(e.GetPosition(null).X, e.GetPosition(null).Y);
+            currMousePosition = new Point(e.GetPosition(null).X, e.GetPosition(null).Y); // где кликнул пользователь
         }
 
         private void chart_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -445,6 +449,14 @@ namespace SteamExtender
                 }
             }
         }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width/e.NewSize.Height < 1.55)
+            {
+                this.Width = e.NewSize.Height * 1.55;
+            }
+        }
     }
 
     internal static class DoubleConverter
@@ -484,6 +496,19 @@ namespace SteamExtender
         static public DateTime FromTicksToDate(long ticks)
         {
             return new DateTime(ticks);
+        }
+    }
+
+    public class WidthToHeightConverter: IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (double)value * MainWindow.NumberOfFriendSlots + 10.0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((double) (value) - 10.0)/MainWindow.NumberOfFriendSlots;
         }
     }
 }
